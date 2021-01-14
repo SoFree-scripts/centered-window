@@ -17,9 +17,8 @@ function centered_window_init()
 function cw_res_get_work_area()
 {
 	sp_sc_exec_file sofplus/data/cw_work_area.cfg
-	sp_sc_flow_if text cvar ~cw_res_taskbar_y != val ""
+	sp_sc_flow_if text cvar cw_res_desktop_y != val ""
 	{
-		add cw_res_desktop_y -$~cw_res_taskbar_y
 		sp_sc_timer 1000 "sp_sc_func_exec cw_res_center"
 		
 	}
