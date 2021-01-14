@@ -24,7 +24,7 @@ path = "."
 cwCfg = os.path.join(path,"sofplus/data/cw_work_area.cfg")
 if not os.path.exists(cwCfg):
 	with open(cwCfg, "w+") as f:
-		f.write("set ~cw_res_taskbar_y \"" + str(work_area[3]) + "\"")
+		f.write("set cw_res_desktop_y \"" + str(work_area[3]) + "\"")
 else:
 	print("file exists")
 
