@@ -1,10 +1,10 @@
 function centered_window_init()
 {
-	
+	sp_
 	sp_sc_cvar_split ~res ":" _sp_cl_vid_mode_0
 	sp_sc_cvar_split ~xy "x" ~res_3
 	set cw_res_desktop_x #~xy_1
-	set cw_res_desktop_y ""
+	set cw_res_desktop_y #~xy_2
 	sp_sc_cvar_copy ~res _sp_cl_vid_mode_$gl_mode
 	sp_sc_cvar_split ~xy "x" ~res
 	set cw_res_sof_x #~xy_1
@@ -16,15 +16,16 @@ function centered_window_init()
 
 function cw_res_get_work_area()
 {
-	sp_sc_flow_if text cvar cw_res_desktop_y != val ""
+	sp_sc_exec_file sofplus/data/cw_work_area.cfg
+	sp_sc_flow_if text cvar ~cw_res_taskbar_y != val ""
 	{
+		add cw_res_desktop_y -$~cw_res_taskbar_y
 		sp_sc_timer 1000 "sp_sc_func_exec cw_res_center"
 		
 	}
 	else
 	{
 		echo "Pls run center_window.py to set your work area"
-		sp_sc_exec_file sofplus/data/cw_work_area.cfg
 		sp_sc_timer 1000 "sp_sc_func_exec cw_res_get_work_area"
 	}
 }
