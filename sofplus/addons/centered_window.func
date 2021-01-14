@@ -1,6 +1,5 @@
 function centered_window_init()
 {
-	sp_
 	sp_sc_cvar_split ~res ":" _sp_cl_vid_mode_0
 	sp_sc_cvar_split ~xy "x" ~res_3
 	set cw_res_desktop_x #~xy_1
