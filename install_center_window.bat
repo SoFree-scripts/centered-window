@@ -1,3 +1,3 @@
 python center_window.py
 cd ..
-run SoF.exe
+start SoF.exe
