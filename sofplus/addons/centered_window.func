@@ -1,0 +1,46 @@
+function centered_window_init()
+{
+	
+	sp_sc_cvar_split ~res ":" _sp_cl_vid_mode_0
+	sp_sc_cvar_split ~xy "x" ~res_3
+	set cw_res_desktop_x #~xy_1
+	set cw_res_desktop_y ""
+	sp_sc_cvar_copy ~res _sp_cl_vid_mode_$gl_mode
+	sp_sc_cvar_split ~xy "x" ~res
+	set cw_res_sof_x #~xy_1
+	set cw_res_sof_y #~xy_2
+	_sp_cl_vid_border 0
+	vid_restart
+	sp_sc_timer 1000 "sp_sc_func_exec cw_res_get_work_area"
+}
+
+function cw_res_get_work_area()
+{
+	sp_sc_flow_if text cvar cw_res_desktop_y != val ""
+	{
+		sp_sc_timer 1000 "sp_sc_func_exec cw_res_center"
+		
+	}
+	else
+	{
+		echo "Pls run center_window.py to set your work area"
+		sp_sc_exec_file sofplus/data/cw_work_area.cfg
+		sp_sc_timer 1000 "sp_sc_func_exec cw_res_get_work_area"
+	}
+}
+function cw_res_center()
+{
+	set ~middle_x #cw_res_desktop_x
+	set ~middle_y #cw_res_desktop_y
+	sp_sc_cvar_math_div ~middle_x 2
+	sp_sc_cvar_math_div ~middle_y 2
+	//neg x (sofres/2)
+	set ~offset_x #cw_res_sof_x
+	set ~offset_y #cw_res_sof_y
+	sp_sc_cvar_math_div ~offset_x 2
+	sp_sc_cvar_math_div ~offset_y 2
+	add ~middle_x -$~offset_x
+	add ~middle_y -$~offset_y
+	set vid_xpos #~middle_x
+	set vid_ypos #~middle_y
+}
