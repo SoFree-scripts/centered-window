@@ -10,7 +10,7 @@ if platform.release() == '10':
 	ctypes.windll.shcore.SetProcessDpiAwareness(2)
 elif platform.release() == '7':
 	ctypes.windll.user32.SetProcessDPIAware()
-else
+else:
 	sys.exit(1)
 
 
