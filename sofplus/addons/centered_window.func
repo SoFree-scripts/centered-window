@@ -9,7 +9,8 @@ function centered_window_init()
 	set cw_res_sof_x #~xy_1
 	set cw_res_sof_y #~xy_2
 	_sp_cl_vid_border 0
-	vid_restart
+	//When testing, borderless seemed to require a vid_restart 
+	//vid_restart
 	sp_sc_timer 1000 "sp_sc_func_exec cw_res_get_work_area"
 }
 
