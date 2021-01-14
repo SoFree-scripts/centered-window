@@ -2,15 +2,11 @@ function centered_window_init()
 {
 	
 	sp_sc_cvar_split ~res ":" _sp_cl_vid_mode_0
-	sp_sc_cvar_list ~res_?
 	sp_sc_cvar_split ~xy "x" ~res_3
-	sp_sc_cvar_list ~xy_?
 	set cw_res_desktop_x #~xy_1
 	set cw_res_desktop_y #~xy_2 
 	sp_sc_cvar_copy ~res _sp_cl_vid_mode_$gl_mode
-	sp_sc_cvar_list ~res
 	sp_sc_cvar_split ~xy "x" ~res
-	sp_sc_cvar_list ~xy_?
 	set cw_res_sof_x #~xy_1
 	set cw_res_sof_y #~xy_2
 	_sp_cl_vid_border 0
@@ -20,21 +16,17 @@ function centered_window_init()
 
 function cw_res_center()
 {
-	sp_sc_cvar_list cw_res_*
 	set ~middle_x #cw_res_desktop_x
 	set ~middle_y #cw_res_desktop_y
 	sp_sc_cvar_math_div ~middle_x 2
 	sp_sc_cvar_math_div ~middle_y 2
 	//neg x (sofres/2)
-	sp_sc_cvar_list ~middle_?
 	set ~offset_x #cw_res_sof_x
 	set ~offset_y #cw_res_sof_y
 	sp_sc_cvar_math_div ~offset_x 2
 	sp_sc_cvar_math_div ~offset_y 2
-	sp_sc_cvar_list ~offset_?
 	add ~middle_x -$~offset_x
 	add ~middle_y -$~offset_y
-	sp_sc_cvar_list ~middle_?
 	set vid_xpos #~middle_x
 	set vid_ypos #~middle_y
 }
