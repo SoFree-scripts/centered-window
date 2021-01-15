@@ -8,9 +8,12 @@ function centered_window_init()
 	sp_sc_cvar_split ~xy "x" ~res
 	set cw_res_sof_x #~xy_1
 	set cw_res_sof_y #~xy_2
-	_sp_cl_vid_border 0
-	//When testing, borderless seemed to require a vid_restart 
-	//vid_restart
+	sp_sc_flow_if number cvar _sp_cl_vid_border == val 1
+	{
+		set _sp_cl_vid_border 0
+		vid_restart
+	}
+	
 	sp_sc_timer 1000 "sp_sc_func_exec cw_res_get_work_area"
 }
 
@@ -19,7 +22,7 @@ function cw_res_get_work_area()
 	sp_sc_exec_file sofplus/data/cw_work_area.cfg
 	sp_sc_flow_if text cvar cw_res_desktop_y != val ""
 	{
-		sp_sc_timer 1000 "sp_sc_func_exec cw_res_center"
+		sp_sc_timer 1 "sp_sc_func_exec cw_res_center"
 		
 	}
 	else
