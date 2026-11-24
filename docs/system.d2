@@ -1,0 +1,73 @@
+# centered-window — system overview
+# A two-part hack for borderless windowed SoF: a Python probe writes the real
+# work-area height once, and a SoFplus script centres the window from it.
+# Zones run left to right: entry points -> core -> state -> external.
+# Style classes set strokes only, so light and dark stay readable.
+
+title: |md
+  # centered-window
+  A Python probe plus a SoFplus addon that make a borderless windowed SoF sit in the middle of the Windows work area.
+| {near: top-center}
+
+direction: right
+grid-columns: 2
+grid-rows: 2
+horizontal-gap: 150
+vertical-gap: 110
+
+entry: Entry points {
+  direction: down
+
+  bat: `install_center_window.bat` · runs the probe from the SoF folder, then `start SoF.exe`
+  py: `center_window.py` · the only thing that asks Windows where the taskbar is
+  func: `sofplus/addons/centered_window.func` · runs inside the game at map load
+}
+
+core: Core {
+  direction: down
+
+  dpi: choose DPI mode · Win10 `SetProcessDpiAwareness(2)`, Win7 `SetProcessDPIAware`, any other release `sys.exit(1)`
+  probe: read work area · `GetMonitorInfo(MonitorFromPoint(0,0))`, the bottom edge is the screen minus the taskbar
+  once: write once · create `sofplus/data/cw_work_area.cfg` only if the file does not exist
+  init: read both resolutions · split `_sp_cl_vid_mode_0` on `:` and `vid_mode_` + `gl_mode` on `x`
+  border: force borderless · if `_sp_cl_vid_border` is 1, set 0 and `vid_restart`
+  wait: wait for the cfg · 1 s timer execs the file, and retries every second with an `echo` hint until `cw_res_desktop_y` is set
+  center: centre it · half desktop minus half game size, written to `vid_xpos` and `vid_ypos`
+
+  dpi -> probe: without awareness the taskbar height is wrong
+  probe -> once: one integer, the work-area bottom
+  init -> border: cvars only, no file
+  border -> wait: the restart must finish first
+  wait -> center: one more 1 ms timer
+}
+
+state: State {
+  direction: down
+
+  cfg: `sofplus/data/cw_work_area.cfg` · one `set` line, written once {shape: cylinder}
+  cvars: `cw_res_desktop_x`, `cw_res_desktop_y`, `cw_res_sof_x`, `cw_res_sof_y` plus two tilde-prefixed scratch cvars · session only
+}
+
+ext: External {
+  direction: down
+
+  windows: Win32 · `GetMonitorInfo`, `MonitorFromPoint`, DPI shcore, the taskbar itself
+  game: SoF.exe · reads `vid_xpos` and `vid_ypos` when it creates the window
+  sofplus: SoFplus scripting · `sp_sc_cvar_*`, `sp_sc_timer`, `sp_sc_flow_if`
+}
+
+entry -> core: the bat runs the probe, the addon runs the maths
+core -> state: the probe leaves one number, the addon leaves cvars
+core -> ext: Windows answers once, the game and SoFplus consume
+
+classes: {
+  entry: {style: {stroke: "#2f6fbf"}}
+  core: {style: {stroke: "#2f8f5f"}}
+  state: {style: {stroke: "#a86a12"; stroke-dash: 3}}
+  ext: {style: {stroke: "#8a4fbf"; stroke-dash: 5}}
+}
+
+entry.class: entry
+core.class: core
+state.class: state
+ext.class: ext
